@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="_template.xhtml">
+
+	<ui:define name="titulo">Login</ui:define>
+
+	<ui:define name="conteudo">
+		<p:messages globalOnly="true" />
+		
+		<h:form id="login">
+			<p:fieldset legend="Formulário de login">
+				<p:panelGrid columns="3">
+					<p:outputLabel value="Email:" for="email" />
+					<p:inputText id="email" value="#{loginBean.usuario.email}" required="true"
+							validatorMessage="Email inválido, deve conter(@)">
+						<f:attribute name="type" value="email" />
+						<f:validateRegex pattern=".+@.+" />
+						<f:ajax event="blur" render="memail" />
+					</p:inputText>
+					<p:message for="email" id="memail" />
+					<p:outputLabel value="Senha:" for="senha" />
+					<p:password id="senha" feedback="true" required="true"
+							value="#{loginBean.usuario.senha}"/>
+					<p:message for="senha" id="msenha" />
+				</p:panelGrid>
+			</p:fieldset> 
+			
+			<p:commandButton value="Logar" action="#{loginBean.logar}" style="margin:5px"
+					update="@form" process="@form"/>
+			<p:commandButton type="reset" value="Limpar" /> 
+		
+		</h:form>
+
+	</ui:define>
+	
+	<ui:define name="rodape">LoginForm</ui:define>
+</ui:composition>
+
+</html>

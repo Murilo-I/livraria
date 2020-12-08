@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="_template.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="autorId" value="#{autorBean.autor.id}" />
+		<f:viewAction action="#{autorBean.carregaAutorPeloId}"
+			if="#{param.autorId != null}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Novo Autor</ui:define>
+
+	<ui:define name="conteudo">
+		<p:messages globalOnly="true" />
+
+		<h:form id="autorForm">
+			<p:fieldset legend="Dados do autor">
+				<p:panelGrid columns="3">
+					<p:outputLabel value="Nome:" for="nome" />
+					<p:inputText id="nome" value="#{autorBean.autor.nome}"
+						required="true"
+						validatorMessage="Nome do autor deve estar entre 6 e 50 caracteres">
+						<f:validateLength minimum="6" maximum="50" />
+					</p:inputText>
+					<p:message for="nome" id="mnome" />
+					<p:outputLabel value="Email:" for="email" />
+					<p:inputText id="email" value="#{autorBean.autor.email}"
+						required="true" validatorMessage="Email inválido, deve conter(@)">
+						<f:attribute name="type" value="email" />
+						<f:validateRegex pattern=".+@.+" />
+						<f:ajax event="blur" render="memail" />
+					</p:inputText>
+					<p:message for="email" id="memail" />
+				</p:panelGrid>
+			</p:fieldset>
+
+			<p:commandButton value="Gravar" action="#{autorBean.gravar}"
+				style="margin:5px" process="@form" update="@form :formList" />
+			<p:commandButton type="reset" value="Limpar" />
+
+		</h:form>
+
+		<h:form id="formList">
+			<p:dataList value="#{livroBean.autores}" var="autor" type="definition"
+				id="autorList">
+				<f:facet name="header">Autores</f:facet>
+				
+				<p:commandButton icon="fa fa-fw fa-edit" update=":autorForm"
+					style="margin:2px 10px" action="#{autorBean.carregar(autor) }" />
+				<p:commandButton icon="fa fa-fw fa-remove" update="@form"
+					style="margin:2px 10px" action="#{autorBean.excluir(autor) }" />
+							
+				#{autor.nome} &diams; #{autor.email}
+					
+			</p:dataList>
+		</h:form>	
+
+	</ui:define>
+	
+	<ui:define name="rodape">AuthorForm</ui:define>
+</ui:composition>
+
+</html>
